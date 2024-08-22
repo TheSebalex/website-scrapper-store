@@ -3,7 +3,17 @@ const require = createRequire(import.meta.url);
 const config = require("../config.json");
 
 export async function scrape(browser, url, scrappingTitleTerms, settings) {
-  await configBrowser(browser);
+  let i = 0;
+  while (i < 5) {
+    try {
+      await configBrowser(browser);
+      i = 0;
+      break;
+    } catch (e) {
+      i++;
+      console.log(e);
+    }
+  }
 
   const page = await browser.newPage();
 

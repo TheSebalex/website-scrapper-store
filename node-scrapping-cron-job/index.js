@@ -12,7 +12,8 @@ const config = require("./config.json");
 
 (async () => {
   cron.schedule(config.scrappingCron, async () => {
-    while (true && (i ?? 0) < 5) {
+    let i = 0
+    while ((i ?? 0) < 5) {
       try {
         const browser = await puppeteer.launch({
           headless: false,
@@ -28,7 +29,7 @@ const config = require("./config.json");
 
           let scrapeResult = await scrape(
             browser,
-            "https://www.ebay.com/str/sagesustainableelectronics?_ipg=72",
+            store.url,
             store.scrappingTitleTerms,
             store
           );
