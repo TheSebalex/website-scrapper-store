@@ -1,16 +1,17 @@
-import {data} from '../json.js'
-import { Product } from './product.jsx'
+import { data } from "../json.js";
+import { Navigation } from "./Navigation.jsx";
+import { ProductGrid } from "./ProductGrid.jsx";
 
 function App() {
-
   return (
     <>
-    <h1>Laptop Store</h1>  
-    <ul className='grid grid-cols-4 gap-y-14'>
-      {data.flat().map(product => <Product key={product.id} {...product} />)}
-    </ul>
+      <Navigation/>
+      <div className="grid md:grid-cols-[30%_70%] grid-cols-1 w-[90%] mx-auto">
+        <div></div>
+        <ProductGrid products={data.flat()} />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

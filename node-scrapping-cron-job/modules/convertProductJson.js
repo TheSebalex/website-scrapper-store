@@ -13,17 +13,22 @@ export async function convertProductJson(browser, products, settings) {
 
     const image = await page.evaluate(
       async img => {
-        return await fetch(img)
-          .then(res => res.blob())
-          .then(async blob => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            return await new Promise(resolve => {
-              reader.onloadend = () => {
-                resolve(reader.result);
-              };
-            });
-          });
+        return await Promise.all(
+          img.map(
+            async item =>
+              await fetch(item)
+                .then(res => res.blob())
+                .then(async blob => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(blob);
+                  return await new Promise(resolve => {
+                    reader.onloadend = () => {
+                      resolve(reader.result);
+                    };
+                  });
+                })
+          )
+        );
       },
       [product.img]
     );
@@ -32,11 +37,10 @@ export async function convertProductJson(browser, products, settings) {
       ...product,
       img: image,
       url: undefined,
-      price: product.price + settings.shipPrice + settings.extraPrice
+      price: product.price + settings.shipPrice + settings.extraPrice,
     });
-
   }
 
-  await page.close()
+  await page.close();
   return productsOutput;
 }

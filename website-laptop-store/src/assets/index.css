@@ -8,14 +8,16 @@
 
 .card {
   margin: auto;
-  width: 280px;
+  width: 95%;
   background: white;
   border-radius: 10px;
-  box-shadow: 0px 0px 15px -2px #bebebe;
+  box-shadow: 0px 0px 15px -3px #bebebe;
 }
 
 .img {
   width: 100%;
+  border: 2px solid white;
+  min-height: 12em;
   height: 12em;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
@@ -25,28 +27,6 @@
   background-repeat: no-repeat;
   align-items: top;
   justify-content: right;
-}
-
-.save {
-  transition: 0.2s ease-in-out;
-  border-radius: 10px;
-  margin: 20px;
-  width: 30px;
-  height: 30px;
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.save .svg {
-  transition: 0.2s ease-in-out;
-  width: 15px;
-  height: 15px;
-}
-
-.save:hover .svg {
-  fill: #ced8de;
 }
 
 .text {
@@ -71,19 +51,4 @@
   margin: 0px;
   text-align: center;
   padding: 5px;
-}
-
-.icon-box {
-  margin: 10px;
-  padding: 12px;
-  background-color: #7980c5;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.icon-box .span {
-  font-family: system-ui;
-  font-size: small;
-  font-weight: 500;
-  color: #fff;
 }

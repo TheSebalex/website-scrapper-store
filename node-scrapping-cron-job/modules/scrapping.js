@@ -32,26 +32,34 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
         itmUrl => {
           const articles = document.querySelectorAll("article");
 
-          return Array.from(articles).map(article => {
-            return {
-              title: article.querySelector("h3").innerText,
-              price:
-                parseInt(
-                  article
-                    .querySelector(
-                      ".str-text-span.str-item-card__property-displayPrice"
-                    )
-                    .innerText.replace(/[^0-9]/g, "")
-                ) / 100,
-              url:
-                itmUrl +
-                JSON.parse(
-                  article
-                    .querySelector('div[role="button"]')
-                    .getAttribute("data-track")
-                )["eventProperty"]["itm"],
-            };
-          });
+          return Array.from(articles)
+            .map(article => {
+              return {
+                title: article.querySelector("h3")?.innerText,
+                price:
+                  parseInt(
+                    article
+                      .querySelector(
+                        ".str-text-span.str-item-card__property-displayPrice"
+                      )
+                      ?.innerText?.replace(/[^0-9]/g, "")
+                  ) / 100,
+                url:
+                  itmUrl +
+                  JSON.parse(
+                    article
+                      ?.querySelector('div[role="button"]')
+                      ?.getAttribute("data-track")
+                  )?.eventProperty?.itm,
+              };
+            })
+            .filter(
+              product =>
+                product.url &&
+                product.price &&
+                product.title &&
+                product.price > 0
+            );
         },
         [config.ebayItmUrl]
       )
@@ -94,11 +102,15 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
             .evaluate(() => {
               return {
                 description: document.querySelector("#desc_ifr").src,
-                img: document
-                  .querySelector(
-                    "*.ux-image-carousel-item.image-treatment.active.image img"
-                  )
-                  .getAttribute("src"),
+                img: Array.from(
+                  document
+                    .querySelector(
+                      ".ux-image-carousel.zoom.img-transition-medium"
+                    )
+                    .querySelectorAll(
+                      ".ux-image-carousel-item.image-treatment.image > img[data-zoom-src]"
+                    )
+                ).map(img => img.getAttribute("data-zoom-src")),
               };
             })
             .then(async data => {

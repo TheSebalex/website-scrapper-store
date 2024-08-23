@@ -2,7 +2,7 @@
   "ebayItmUrl": "https://www.ebay.com/itm/",
   "configShipUrl": "https://www.ebay.com/",
   "shipCountrySelector": "*[data-country=\"USA|US\"]",
-  "scrappingCron": "*/15 * * * *",
+  "scrappingCron": "*/30 * * * *",
   "scrappingStores": [
     {
       "url": "https://www.ebay.com/str/sagesustainableelectronics?_ipg=72",
@@ -20,7 +20,7 @@
       "extraPrice": 80,
       "scrappingTitleTerms": ["GB"],
       "excludeTitleTerms": [],
-      "descSelector": "ul"
+      "descSelector": "[style='color: blue']"
     }
   ]
 }

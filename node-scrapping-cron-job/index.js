@@ -12,7 +12,7 @@ const config = require("./config.json");
 
 (async () => {
   cron.schedule(config.scrappingCron, async () => {
-    let i = 0
+    let i = 0;
     while ((i ?? 0) < 5) {
       try {
         const browser = await puppeteer.launch({
@@ -34,11 +34,7 @@ const config = require("./config.json");
             store
           );
 
-          scrapeResult = await convertProductJson(
-            browser,
-            scrapeResult,
-            config.scrappingStores[0]
-          );
+          scrapeResult = await convertProductJson(browser, scrapeResult, store);
           outputStores.push(scrapeResult);
         }
 
