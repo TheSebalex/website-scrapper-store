@@ -4,7 +4,7 @@ const config = require("../config.json");
 
 export async function convertProductJson(browser, products, settings) {
   const page = await browser.newPage();
-  const productsOutput = [];
+  let productsOutput = [];
 
   await page.goto(config.configShipUrl);
 
@@ -41,6 +41,20 @@ export async function convertProductJson(browser, products, settings) {
     });
   }
 
+  productsOutput = orderByTitle(productsOutput, "title");
+
   await page.close();
   return productsOutput;
+}
+
+function orderByTitle(arr, value) {
+  return arr.sort((a, b) => {
+    if (a[value] < b[value]) {
+      return -1;
+    }
+    if (a[value] > b[value]) {
+      return 1;
+    }
+    return 0;
+  });
 }

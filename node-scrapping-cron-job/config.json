@@ -19,7 +19,7 @@
       "shipPrice": 10,
       "extraPrice": 80,
       "scrappingTitleTerms": ["GB"],
-      "excludeTitleTerms": [],
+      "excludeTitleTerms": ["S24", "iPhone 15"],
       "descSelector": "[style='color: blue']"
     }
   ]

@@ -1,7 +1,7 @@
 export function Product({ title, description, price, img }) {
   return (
     <div class="md:h-[27rem] h-20rem card flex flex-col relative overflow-clip pb-9">
-      <div class="img" style={{ backgroundImage: `url(${Array.isArray(img) ? img[0] : img})` }}></div>
+      <img className="img" src={Array.isArray(img) ? img[0] : img} alt="" />
       <div class="text flex-grow">
         <h2 class="h3 leading-none mb-2">{title}</h2>
         <p class="p leading-tight flex-1">
