@@ -17,9 +17,9 @@
       "url": "https://www.ebay.com/str/thegizmotrader?_ipg=72",
       "name": "thegizmotrader",
       "shipPrice": 10,
-      "extraPrice": 80,
+      "extraPrice": 50,
       "scrappingTitleTerms": ["GB"],
-      "excludeTitleTerms": ["S24", "iPhone 15"],
+      "excludeTitleTerms": ["S24", "iPhone"],
       "descSelector": "[style='color: blue']"
     }
   ]

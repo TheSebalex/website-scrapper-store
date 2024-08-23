@@ -5,13 +5,26 @@ export function ProductGrid({ products }) {
   const [filteredProducts, setFilteredProducts] = useState(products);
 
   const search = query => {
-    setFilteredProducts(
-      products.filter(product => {
+    let fil = products.filter(product => {
+      return query.split(" ").every(itm => {
+        return product.title
+          .toLowerCase()
+          .includes(
+            (itm !== "" ? " " : "") +
+              itm.toLowerCase() +
+              (itm !== "" ? " " : "")
+          );
+      });
+    });
+
+    if (fil.length === 0)
+      fil = products.filter(product => {
         return query.split(" ").every(itm => {
           return product.title.toLowerCase().includes(itm.toLowerCase());
         });
-      })
-    );
+      });
+
+    setFilteredProducts(fil);
   };
 
   return (
@@ -28,7 +41,9 @@ export function ProductGrid({ products }) {
         </label>
       </div>
       <div className="grid">
-        <h2 className="text-sm ml-2 mb-2 text-gray-400">Mostrando: {filteredProducts.length}</h2>
+        <h2 className="text-sm ml-2 mb-2 text-gray-400">
+          Mostrando: {filteredProducts.length}
+        </h2>
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-y-14 mb-10">
           {filteredProducts.flat().map((product, i) => (
             <Product key={i} {...product} />
