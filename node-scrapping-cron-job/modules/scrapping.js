@@ -94,7 +94,13 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
 
         const productPage = await browser.newPage();
 
-        await productPage.goto(product.url, { waitUntil: "domcontentloaded" });
+        await productPage.setViewport({
+          width: 1080,
+          height: 900,
+          deviceScaleFactor: 1,
+        })
+
+        await productPage.goto(product.url, { waitUntil: "load" });
 
         productTemp.push({
           ...product,
@@ -145,9 +151,10 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
 
 async function configBrowser(browser) {
   const page = await browser.newPage();
-  await page.goto(config.configShipUrl, { waitUntil: "domcontentloaded" });
-
+  
   try {
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto(config.configShipUrl, { waitUntil: "load" });
     await page
       .locator('*[aria-controls="gh-shipto-click-o"]')
       .click({ idleTimeout: 1000 });
@@ -156,7 +163,7 @@ async function configBrowser(browser) {
     await page.click('button[aria-label="Enviar a:"]');
     await page.waitForNetworkIdle({ idleTimeout: 1000 });
 
-    await page.click(config.shipCountrySelector);
+    await page.click(config.shipCountrySelector);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     await page.waitForNetworkIdle({ idleTimeout: 5000 });
 
     await page.click(".shipto__close-btn");

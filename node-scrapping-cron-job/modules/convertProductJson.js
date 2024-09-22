@@ -2,35 +2,25 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const config = require("../config.json");
 
-export async function convertProductJson(browser, products, settings) {
-  const page = await browser.newPage();
+export async function convertProductJson(products, settings) {
   let productsOutput = [];
-
-  await page.goto(config.configShipUrl);
 
   for (const product of products) {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const image = await page.evaluate(
-      async img => {
-        return await Promise.all(
-          img.map(
-            async item =>
-              await fetch(item)
-                .then(res => res.blob())
-                .then(async blob => {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(blob);
-                  return await new Promise(resolve => {
-                    reader.onloadend = () => {
-                      resolve(reader.result);
-                    };
-                  });
-                })
-          )
-        );
-      },
-      [product.img]
+    const image = await Promise.all(
+      product.img.map(
+        async (item, i) =>{
+          await new Promise(resolve => setTimeout(resolve, i * 500));
+          return await fetch(item)
+          .then(response => response.blob())
+          .then(async blob => {
+            const buffer = Buffer.from(await blob.arrayBuffer());
+            const b64 = "data:" + blob.type + ';base64,' + buffer.toString('base64');
+            return b64;
+          })
+        }
+      )
     );
 
     productsOutput.push({
@@ -43,7 +33,6 @@ export async function convertProductJson(browser, products, settings) {
 
   productsOutput = orderByTitle(productsOutput, "title");
 
-  await page.close();
   return productsOutput;
 }
 

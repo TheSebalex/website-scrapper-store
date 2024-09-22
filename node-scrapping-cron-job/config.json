@@ -2,25 +2,16 @@
   "ebayItmUrl": "https://www.ebay.com/itm/",
   "configShipUrl": "https://www.ebay.com/",
   "shipCountrySelector": "*[data-country=\"USA|US\"]",
-  "scrappingCron": "*/30 * * * *",
+  "scrappingCron": "0 */4 * * *",
   "scrappingStores": [
     {
       "url": "https://www.ebay.com/str/sagesustainableelectronics?_ipg=72",
       "name": "sagese",
       "shipPrice": 40,
-      "extraPrice": 100,
+      "extraPrice": 80,
       "scrappingTitleTerms": ["Laptop", "13\"", "13.3\"", "14\"", "15\"", "15.6\"", "16.1\"", "17.3\""],
       "excludeTitleTerms": ["Lote"],
       "descSelector": "ul"
-    },
-    {
-      "url": "https://www.ebay.com/str/thegizmotrader?_ipg=72",
-      "name": "thegizmotrader",
-      "shipPrice": 10,
-      "extraPrice": 50,
-      "scrappingTitleTerms": ["GB"],
-      "excludeTitleTerms": ["S24", "iPhone"],
-      "descSelector": "[style='color: blue']"
     }
   ]
 }

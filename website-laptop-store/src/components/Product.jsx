@@ -1,10 +1,11 @@
 export function Product({ title, description, price, img }) {
+  console.log(img)
   return (
-    <div class="md:h-[27rem] h-20rem card flex flex-col relative overflow-clip pb-9">
+    <div className="md:h-[27rem] h-20rem card flex flex-col relative overflow-clip pb-9">
       <img className="img" src={Array.isArray(img) ? img[0] : img} alt="" />
-      <div class="text flex-grow">
-        <h2 class="h3 leading-none mb-2">{title}</h2>
-        <p class="p leading-tight flex-1">
+      <div className="text flex-grow">
+        <h2 className="h3 leading-none mb-2">{title}</h2>
+        <p className="p leading-tight flex-1">
           {description.slice(0, 200).replace(/(<([^>]+)>)/gi, "")}
           {description.length > 200 ? "..." : ""}
         </p>
