@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "./product";
 
 export function ProductGrid({ products }) {
   const [filteredProducts, setFilteredProducts] = useState(products);
+
+useEffect(() => {
+  setFilteredProducts(products);
+}, [products]);
 
   const search = query => {
     let fil = products.filter(product => {

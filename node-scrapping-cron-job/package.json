@@ -6,13 +6,20 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "install": "npm install && npx puppeteer browsers install chrome"
+    "install_program": "npm install && npx puppeteer browsers install chrome"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "image-type": "^5.2.0",
     "node-cron": "^3.0.3",
-    "puppeteer": "^23.1.1"
+    "puppeteer": "^23.1.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "sharp": "^0.33.5",
+    "sqlite3": "^5.1.7"
   }
 }

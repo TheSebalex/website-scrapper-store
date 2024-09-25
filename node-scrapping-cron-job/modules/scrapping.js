@@ -2,7 +2,13 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const config = require("../config.json");
 
-export async function scrape(browser, url, scrappingTitleTerms, settings) {
+export async function scrape(
+  browser,
+  url,
+  scrappingTitleTerms,
+  settings,
+  userAgent,
+) {
   let i = 0;
   while (i < 5) {
     try {
@@ -16,8 +22,13 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
   }
 
   const page = await browser.newPage();
+  await page.setUserAgent(userAgent);
+  await page.setViewport({ width: 1920, height: 1080 });
 
   await page.goto(url, { waitUntil: "domcontentloaded" });
+  try{
+    await page.waitForNetworkIdle({ idleTime: 10000});
+  } catch(e) {}
 
   let existNextButtonBool = await existsNextButton(page);
 
@@ -29,13 +40,22 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
 
     products = products.concat(
       await page.evaluate(
-        itmUrl => {
+        (itmUrl, settings) => {
           const articles = document.querySelectorAll("article");
 
           return Array.from(articles)
-            .map(article => {
+            .map((article) => {
+              const title = article.querySelector("h3")?.innerText;
+
               return {
-                title: article.querySelector("h3")?.innerText,
+                title: settings?.deleteTitleDescExpression
+                  ? title
+                      .replace(
+                        new RegExp(settings.deleteTitleDescExpression),
+                        ""
+                      )
+                      .replace("  ", " ")
+                  : title,
                 price:
                   parseInt(
                     article
@@ -54,26 +74,27 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
               };
             })
             .filter(
-              product =>
+              (product) =>
                 product.url &&
-                product.price &&
                 product.title &&
+                product.price &&
                 product.price > 0
             );
         },
-        [config.ebayItmUrl]
+        config.ebayItmUrl,
+        settings
       )
     );
 
     existNextButtonBool = await existsNextButton(page);
   }
 
-  products = products.filter(product => {
+  products = products.filter((product) => {
     return (
-      scrappingTitleTerms.some(term => {
+      scrappingTitleTerms.some((term) => {
         return product.title.includes(term);
       }) &&
-      !settings.excludeTitleTerms.some(term => {
+      !settings.excludeTitleTerms.some((term) => {
         return product.title.includes(term);
       })
     );
@@ -90,15 +111,18 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
 
       hasError = false;
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const productPage = await browser.newPage();
+        await page.setUserAgent(
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+        );
 
         await productPage.setViewport({
           width: 1080,
           height: 900,
           deviceScaleFactor: 1,
-        })
+        });
 
         await productPage.goto(product.url, { waitUntil: "load" });
 
@@ -116,16 +140,16 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
                     .querySelectorAll(
                       ".ux-image-carousel-item.image-treatment.image > img[data-zoom-src]"
                     )
-                ).map(img => img.getAttribute("data-zoom-src")),
+                ).map((img) => img.getAttribute("data-zoom-src")),
               };
             })
-            .then(async data => {
+            .then(async (data) => {
               await productPage.goto(data.description, {
                 waitUntil: "domcontentloaded",
               });
 
               const desc = await productPage.evaluate(
-                selector => {
+                (selector) => {
                   return document.querySelector(selector)?.innerText ?? "";
                 },
                 [settings.descSelector]
@@ -151,7 +175,12 @@ export async function scrape(browser, url, scrappingTitleTerms, settings) {
 
 async function configBrowser(browser) {
   const page = await browser.newPage();
-  
+  await page.setUserAgent(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+  );
+
+  await page.setViewport({ width: 1920, height: 1080 });
+
   try {
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(config.configShipUrl, { waitUntil: "load" });
@@ -163,7 +192,7 @@ async function configBrowser(browser) {
     await page.click('button[aria-label="Enviar a:"]');
     await page.waitForNetworkIdle({ idleTimeout: 1000 });
 
-    await page.click(config.shipCountrySelector);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    await page.click(config.shipCountrySelector);
     await page.waitForNetworkIdle({ idleTimeout: 5000 });
 
     await page.click(".shipto__close-btn");

@@ -1,31 +1,41 @@
-import puppeteer from "puppeteer";
 import fs from "fs";
 import cron from "node-cron";
 
 import { convertProductJson } from "./modules/convertProductJson.js";
 import { scrape } from "./modules/scrapping.js";
 
+import puppeteerExtra from "puppeteer-extra";
+import Stealth from "puppeteer-extra-plugin-stealth";
+
+puppeteerExtra.use(Stealth());
+
 import { createRequire } from "module";
 import { uploadToProd } from "./modules/uploadToProd.js";
+import apiIndex from "./modules/api.js";
 const require = createRequire(import.meta.url);
 const config = require("./config.json");
 
-let task;
+let executing = false;
 
 (async () => {
   cron.schedule(config.scrappingCron, scrappingTask);
-  scrappingTask();
+
+  apiIndex(config.apiPort);
+
+  if(config.startAppScrapping) scrappingTask();
 })();
 
 async function scrappingTask() {
+  if (executing) return;
+  executing = true;
+
   let i = 0;
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [
-      "--disable-web-security",
-      "--disable-features=IsolateOrigins,site-per-process",
-    ],
+
+  const browser = await puppeteerExtra.launch({
+    headless: !config.showBrowser,
+    protocolTimeout: 300000,
   });
+
   while ((i ?? 0) < 5) {
     try {
       let outputStores = [];
@@ -37,16 +47,19 @@ async function scrappingTask() {
           browser,
           store.url,
           store.scrappingTitleTerms,
-          store
+          store,
+          config.userAgent,
         );
 
+        console.log("Converting products");
         scrapeResult = await convertProductJson(scrapeResult, store);
         outputStores.push(scrapeResult);
       }
 
       fs.writeFileSync("products.json", JSON.stringify(outputStores));
 
-      uploadToProd();
+      console.log("Uploading to prod");
+      await uploadToProd();
 
       i = 0;
       break;
@@ -55,5 +68,9 @@ async function scrappingTask() {
       console.log(e);
     }
   }
+
+  console.log("Closing browser");
+  console.log("---------- Finished ---------- \n");
   await browser.close();
+  executing = false;
 }

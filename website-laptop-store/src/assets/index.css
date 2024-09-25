@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 :root {
-    font-family: montserrat, sans-serif;
+  font-family: montserrat, sans-serif;
+}
+
+@layer components {
+  .allscreen {
+    @apply w-full h-full top-0 left-0 right-0 bottom-0 fixed;
+  }
 }
 
 .card {
@@ -11,7 +17,7 @@
   width: 95%;
   background: white;
   border-radius: 10px;
-  box-shadow: 0px 0px 15px -3px #bebebe;
+  box-shadow: 0px 0px 15px 0 #c3c3c3;
 }
 
 .img {
