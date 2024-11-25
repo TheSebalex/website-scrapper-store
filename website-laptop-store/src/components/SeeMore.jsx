@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as ReactDOM from "react-dom/client";
 
 export async function seeMoreAsync(product) {
-  return await new Promise((resolve) => {
+  return await new Promise(resolve => {
     const div = document.createElement("div");
     const root = ReactDOM.createRoot(div);
     document.body.appendChild(div);
@@ -24,8 +24,8 @@ function SeeMore({ product, resolve }) {
   const [css, setCss] = useState("opacity-0");
   const [displayImg, setDisplayImg] = useState(false);
 
-  const moveImage = (dir) => {
-    setCurr((x) => {
+  const moveImage = dir => {
+    setCurr(x => {
       if (!product.img[x + dir]) return x;
       else return x + dir;
     });
@@ -39,11 +39,20 @@ function SeeMore({ product, resolve }) {
     setCss("opacity-0");
     setTimeout(() => resolve(), 160);
   };
+  
+  const redrectToWs = () => {
+    const template = 'https://wa.me/584243364561?text=Comprar ' + product.title + " - " + product.price + "$";
+    const a = document.createElement("a");
+    a.href = template;
+    a.target = '_blank'
+    a.click();
+    a.remove()
+  }
 
   useEffect(() => {
     setTimeout(() => setCss("opacity-100"), 1);
 
-    document.body.onkeydown = (e) => {
+    document.body.onkeydown = e => {
       if (e.key === "ArrowLeft") moveImage(-1);
       if (e.key === "ArrowRight") moveImage(1);
       if (e.key === "Escape") close();
@@ -57,8 +66,7 @@ function SeeMore({ product, resolve }) {
       className={
         "w-full h-full allscreen bg-black/50 z-40 flex items-center justify-center transition-all " +
         css
-      }
-    >
+      }>
       {displayImg && (
         <>
           <img
@@ -100,13 +108,12 @@ function SeeMore({ product, resolve }) {
                 <box-icon name="dollar"></box-icon>
                 {product.price}
               </h3>
-              <button className="[&_div]:hover:scale-110 [&_span]:hover:translate-x-1 [&_div]:hover:rotate-[20deg] text-md bg-indigo-400 rounded-lg px-4 py-2 flex justify-center items-center gap-2 text-white font-medium">
+              <button onClick={redrectToWs} className="[&_div]:hover:scale-110 [&_span]:hover:translate-x-1 [&_div]:hover:rotate-[20deg] text-md bg-indigo-400 rounded-lg px-4 py-2 flex justify-center items-center gap-2 text-white font-medium">
                 <div className="transition-all m-auto flex">
                   <box-icon
                     name="cart-alt"
                     type="solid"
-                    color="white"
-                  ></box-icon>
+                    color="white"></box-icon>
                 </div>
                 <span className="flex m-auto transition-all">Comprar</span>
               </button>

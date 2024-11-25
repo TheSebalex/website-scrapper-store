@@ -3,28 +3,19 @@
   "configShipUrl": "https://www.ebay.com/",
   "shipCountrySelector": "*[data-country=\"USA|US\"]",
   "scrappingCron": "0 */4 * * *",
-  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:130.0) Gecko/20100101 Firefox/130.0",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
   "showBrowser": true,
   "apiPort": 3000,
+  "startAppScrapping": false,
   "scrappingStores": [
     {
       "url": "https://www.ebay.com/str/sagesustainableelectronics?_ipg=72",
       "name": "sagese",
-      "shipPrice": 40,
-      "extraPrice": 60,
+      "shipPrice": 50,
+      "extraPrice": 70,
       "scrappingTitleTerms": ["Laptop", "13\"", "13.3\"", "14\"", "15\"", "15.6\"", "16.1\"", "17.3\""],
       "excludeTitleTerms": ["Lote"],
       "descSelector": "ul"
-    },
-    {
-      "url": "https://www.ebay.com/str/thegizmotrader?_ipg=72",
-      "name": "gizmotrader",
-      "shipPrice": 15,
-      "extraPrice": 35,
-      "scrappingTitleTerms": ["256"],
-      "deleteTitleDescExpression": "[0-9]{4,}",
-      "excludeTitleTerms": ["S24", "Google", "iPhone 14", "S24 Ultra"],
-      "descSelector": ".Description-heading"
     }
   ]
 }

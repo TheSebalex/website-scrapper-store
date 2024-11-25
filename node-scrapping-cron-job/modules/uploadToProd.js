@@ -2,7 +2,7 @@ import fs from "fs";
 import DB from "./db.js";
 
 export async function uploadToProd() {
-  let products = fs.readFileSync("./sources/products.json", "utf-8");
+  let products = fs.readFileSync("./products.json", "utf-8");
 
   products = JSON.parse(products).flat();
 

@@ -1,3 +1,3 @@
 export default {
-    endpointUrl: "https://7t6gm60l-3000.use2.devtunnels.ms"
+    endpointUrl: "https://46r204h6-3000.use2.devtunnels.ms"
 }

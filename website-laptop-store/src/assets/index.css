@@ -27,7 +27,7 @@
   height: 12em;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  object-fit: contain;
+  object-fit: cover;
   align-items: top;
   justify-content: right;
 }
